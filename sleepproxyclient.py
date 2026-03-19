@@ -459,7 +459,7 @@ if __name__ == "__main__":
         "format": "%(asctime)s spc[%(process)d] %(levelname)s %(filename)s[%(funcName)s:%(lineno)d] %(message)s",
         "datefmt": "%b %d %Y %H:%M:%S",
     }
-    if args.debug is not None:
+    if args.debug:
         logging_config["level"] = logging.DEBUG
     if args.logfile is not None:
         logging_config["filename"] = args.logfile
