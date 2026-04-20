@@ -33,7 +33,8 @@ pre|suspend|hibernate)
 	sleep 2
 
 	logger -t $TAG "running sleepproxyclient"
-	bash $SCRIPTDIR/sleepproxyclient.sh
+	export SPC_INTERFACES SPC_PREFERRED_PROXIES SPC_LEASE_TIME SPC_LOGFILE SPC_DEBUG
+	python3 "$SCRIPTDIR//sleepproxyclient.py"
 
 	if [ -n "${SPC_RTC_WAKE}" -a -e "/sys/class/rtc/${SPC_RTC_WAKE}" ] ; then
 		logger -t $TAG "Setting RTC Alarm"
