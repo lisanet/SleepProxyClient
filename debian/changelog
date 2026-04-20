@@ -1,10 +1,11 @@
 sleepproxyclient (2.4.1) unstable; urgency=low
 
+  * Fix DEBUG mode
   * Drop sleepproxyclient.sh 
   * Call sleepproxyclient.py from 00_sleepproxyclient
   * read SPC_* var in parse_arguments() and ensure defaults
 
- -- Simone Karin Lehmann <skl@lisanet.de>  Mon, 20 Apr 2026 17:38:13 +0200
+ -- Simone Karin Lehmann <skl@lisanet.de>  Mon, 20 Apr 2026 18:57:00 +0200
 
 sleepproxyclient (2.4) unstable; urgency=low
 
