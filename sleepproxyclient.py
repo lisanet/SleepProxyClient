@@ -435,24 +435,24 @@ def parse_arguments() -> argparse.Namespace:
              A list of Sleep Proxy Servers to prefer.
              Sleep Proxy Servers with those host names will be preferred if discovered.
              """,
-        default=os.environ.get("SPC_PREFERRED_PROXIES" or "").split() or None,
+        default=(os.environ.get("SPC_PREFERRED_PROXIES") or "").split() or None,
     )
     parser.add_argument(
         "--lease-time",
         type=int,
         help="Lease time for the update in seconds. Client will be woken up after this period.",
-        default=int(os.environ.get("SPC_LEASE_TIME" or DEFAULT_LEASE_TIME)),
+        default=int(os.environ.get("SPC_LEASE_TIME") or DEFAULT_LEASE_TIME),
     )
     parser.add_argument(
         "--logfile",
         help="The file to log output to.",
-        default=os.environ.get("SPC_LOGFILE" or DEFAULT_LOGFILE),
+        default=os.environ.get("SPC_LOGFILE") or DEFAULT_LOGFILE,
     )
     parser.add_argument(
         "--debug",
         action="store_true",
         help="Enables debug logging.",
-        default=os.environ.get("SPC_DEBUG" or "0") == "1",
+        default=(os.environ.get("SPC_DEBUG") or "0") == "1",
     )
     return parser.parse_args()
 
