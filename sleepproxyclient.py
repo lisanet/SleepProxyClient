@@ -426,7 +426,7 @@ def parse_arguments() -> argparse.Namespace:
         "--interfaces",
         nargs="+",
         help="A list of network interfaces to use, separated by space.",
-        default=os.environ.get("SPC_INTERFACES" or "all").split(),
+        default=(os.environ.get("SPC_INTERFACES") or "all").split(),
     )
     parser.add_argument(
         "--preferred-proxies",
