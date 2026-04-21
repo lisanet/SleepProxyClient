@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with SleepProxyClient. If not, see <http://www.gnu.org/licenses/>.
 
-. /etc/default/sleepproxyclient
+. /etc/sleepproxyclient.conf
 
 TAG="sleepproxyclient"
 SCRIPTDIR="/usr/share/sleepproxyclient/scripts"
