@@ -24,37 +24,38 @@
 TAG="sleepproxyclient"
 SCRIPTDIR="/usr/share/sleepproxyclient/scripts"
 
+log() 
+{
+    [ ! -f "$SPC_LOGFILE" ] && return
+    d=$(date -Isec)
+    [ "$SPC_DEBUG" = "1" ] && echo "$d [$TAG] 00_sleepproxyclient: $1" >> "$SPC_LOGFILE"
+}
+
 case $1 in
 pre|suspend|hibernate)
 ## RUN BEFORE SUSPEND OR HIBERNATE
-	# Restart avahi to ensure it is alive and usable
-	service avahi-daemon restart
-	# avahi might need some additional time to fully start up
-	sleep 2
+    
+    avahi-set-host-name $(hostname)
 
-	logger -t $TAG "running sleepproxyclient"
-	export SPC_INTERFACES SPC_PREFERRED_PROXIES SPC_LEASE_TIME SPC_LOGFILE SPC_DEBUG
-	python3 "$SCRIPTDIR/sleepproxyclient.py"
+    log "running sleepproxyclient"
+    export SPC_INTERFACES SPC_PREFERRED_PROXIES SPC_LEASE_TIME SPC_LOGFILE SPC_DEBUG
+    python3 "$SCRIPTDIR/sleepproxyclient.py"
 
-	if [ -n "${SPC_RTC_WAKE}" -a -e "/sys/class/rtc/${SPC_RTC_WAKE}" ] ; then
-		logger -t $TAG "Setting RTC Alarm"
-		echo `date '+%s' -d "+ ${SPC_LEASE_TIME} seconds"` > "/sys/class/rtc/${SPC_RTC_WAKE}/wakealarm"
-	fi
-	logger -t $TAG "done: $?"
+    if [ -n "${SPC_RTC_WAKE}" -a -e "/sys/class/rtc/${SPC_RTC_WAKE}" ] ; then
+        log "setting RTC alarm"
+        rtc_time=$((SPC_LEASE_TIME +  60))
+        echo `date '+%s' -d "+ ${rtc_time} seconds"` > "/sys/class/rtc/${SPC_RTC_WAKE}/wakealarm"
+    fi
+    log "done: $?"
 ;;
 post|thaw|resume)
 ## RUN AFTER RESUME AND
 ## AFTER RESUME FROM SUSPEND TO DISK
-
-	if [ "$SPC_DEBUG" != "" ] ; then
-		logger -t $TAG "awake!"
-	fi
-
-	# Restart avahi to ensure it is alive and usable
-	service avahi-daemon restart
+    log "awake!"
 
 	if [ -n "${SPC_RTC_WAKE}" -a -e "/sys/class/rtc/${SPC_RTC_WAKE}" ] ; then
 		# Ensure RTC alarm is cleared on wake
+		log "clear RTC alarm"
 		echo 0 > "/sys/class/rtc/${SPC_RTC_WAKE}/wakealarm"
 	fi
 ;;
